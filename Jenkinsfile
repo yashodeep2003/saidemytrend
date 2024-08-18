@@ -1,5 +1,6 @@
-pipeline {
+def registry = 'https://saidemy.jfrog.io/'
 
+pipeline {
     // Specify the agent to run the pipeline
     agent any
     // Set environment variables for the pipeline
@@ -46,5 +47,39 @@ pipeline {
                 }
             }
         }
+
+        // Stage for publishing the JAR files to Artifactory
+        stage("Jar Publish") {
+            steps {
+                script {
+                    // Log message to indicate JAR publish start
+                    echo '<--------------- Jar Publish Started --------------->'
+                    // Define the Artifactory server
+                    def server = Artifactory.newServer url: registry + "/artifactory", credentialsId: "artifact-cred"
+                    // Set properties for the build
+                    def properties = "buildid=${env.BUILD_ID},commitid=${GIT_COMMIT}"
+                    // Define the upload specification
+                    def uploadSpec = """{
+                          "files": [
+                            {
+                              "pattern": "jarstaging/(*)",
+                              "target": "sai-libs-release-local/{1}",
+                              "flat": "false",
+                              "props": "${properties}",
+                              "exclusions": [ "*.sha1", "*.md5"]
+                            }
+                         ]
+                     }"""
+                    // Upload the files to Artifactory and collect build info
+                    def buildInfo = server.upload(uploadSpec)
+                    buildInfo.env.collect()
+                    // Publish the build information to Artifactory
+                    server.publishBuildInfo(buildInfo)
+                    // Log message to indicate JAR publish end
+                    echo '<--------------- Jar Publish Ended --------------->'
+                }
+            }
+        }
     }
 }
+
