@@ -1,5 +1,5 @@
 // Define the URL of the Artifactory registry
-def registry = 'https://saidemy550.jfrog.io'
+def registry = 'https://trial9gp9fa.jfrog.io'
 
 pipeline {                                    // 1  // Defines the start of the Jenkins pipeline block
 
