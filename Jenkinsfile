@@ -1,6 +1,7 @@
-def registry = 'https://trialkub2kx.jfrog.io/'
+def registry = 'https://trialkub2kx.jfrog.io'
 
 pipeline {                                    // 1  // Defines the start of the Jenkins pipeline block
+
     agent any                                 // Specifies the pipeline can run on any available agent
 
     environment {                             // 2  // Defines environment variables for the pipeline
@@ -8,7 +9,7 @@ pipeline {                                    // 1  // Defines the start of the 
     }                                         // 2  // Ends the environment block
 
     stages {                                  // 3  // Defines the stages block where multiple stages are declared
-        
+
         stage("build") {                      // 4  // Creates a stage named 'build'
             steps {                           // 5  // Defines the steps that will be executed in this stage
                 echo "----------- build started ----------"  
@@ -35,16 +36,17 @@ pipeline {                                    // 1  // Defines the start of the 
             environment {                     // 9  // Defines environment variables specific to this stage
                 scannerHome = tool 'saidemy-sonar-scanner'  
                                               // Sets the SonarQube scanner tool
-Ends the 'Jar Publish' stag            }                                 // 9  // Ends the environment block for this stage
+            }                                 // 9  // Ends the environment block for this stage
 
             steps {                           // 10  // Defines the steps that will be executed in this stage
-                withSonarQubeEnv('saidemy-sonarqube-server') {
+                withSonarQubeEnv('saidemy-sonarqube-server') {  
                                               // Executes the SonarQube analysis within the SonarQube environment
                     sh "${scannerHome}/bin/sonar-scanner"  
                                               // Runs the SonarQube scanner tool
                 }                             // Ends the withSonarQubeEnv block
             }                                 // 10  // Ends the steps block for 'SonarQube analysis' stage
         }                                     // 8  // Ends the 'SonarQube analysis' stage
+
         stage("Jar Publish") {                // 14  // Creates a stage named 'Jar Publish'
             steps {                           // 15  // Defines the steps that will be executed in this stage
                 script {                      // 16  // Allows running custom Groovy script inside the pipeline
