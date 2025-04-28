@@ -1,3 +1,4 @@
+pipeline {                                    // 1  // Defines the start of the Jenkins pipeline block
     agent any                                 // Specifies the pipeline can run on any available agent
 
     environment {                             // 2  // Defines environment variables for the pipeline
