@@ -1,3 +1,6 @@
+// Define the URL of the Artifactory registry
+def registry = 'https://trialkub2kx.jfrog.io'
+
 pipeline {                                    // 1  // Defines the start of the Jenkins pipeline block
 
     agent any                                 // Specifies the pipeline can run on any available agent
